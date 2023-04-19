@@ -1,75 +1,80 @@
-def czy_remis(gra):
-  if (gra[0][0]!="" and gra[0][1]!="" and gra[0][2]!="" and gra[1][0]!="" and gra[1][1]!="" and gra[1][2]!="" and gra[2][0]!="" and gra[2][1]!="" and gra[2][2]!=""):
-    return True
-  else:
-    return False
+import random
+import os
+def draw(table):
+    print(f'{table[0]} {table[1]} {table[2]}\n'
+          f'{table[3]} {table[4]} {table[5]}\n'
+          f'{table[6]} {table[7]} {table[8]}')
 
-def wpisz(f):
-  z=int(input(f))
-  if z < 0 or z > 2:
-    raise ValueError;
-  return z    
-
-def sprawdz(gra,gracz):
-  if ((gra[0][0]==gracz and gra[0][1]==gracz and gra[0][2]==gracz)
-or (gra[1][0]==gracz and gra[1][1]==gracz and gra[1][2]==gracz)
-or (gra[2][0]==gracz and gra[2][1]==gracz and gra[2][2]==gracz)
-or (gra[0][0]==gracz and gra[1][0]==gracz and gra[2][0]==gracz)
-or (gra[0][1]==gracz and gra[1][1]==gracz and gra[2][1]==gracz)
-or (gra[0][2]==gracz and gra[1][2]==gracz and gra[2][2]==gracz)
-or (gra[0][0]==gracz and gra[1][1]==gracz and gra[2][2]==gracz)
-or (gra[0][2]==gracz and gra[1][1]==gracz and gra[2][0]==gracz)):
-    return True
-  else:
-    return False 
-
-def rysuj(gra1):
-  for n in range(len(gra1)):
-    print(gra1[n])
-
-def zmien(gracz):
-  if (gracz=="x"):
-    return "o"
-  else:
-    return "x"
-
-print("NIE POWTARZAJ TYCH SAMYCH WSPÓŁRZĘDNYCH!")
-print("instrukcja do gry: ")
-print("")
-print("- każde pole ma swój własny kod i są to: ")
-gra1 = [["0,0","0,1","0,2"],["1,0","1,1","1,2"],["2,0","2,1","2,2"]]
-rysuj(gra1)
-print("")
-print("Pisz tylko liczby (0,1,2) ")
-print("")
-print("Zaczyna krzyżyk ")
-print("")
-print("Gra :")
-winner=False
-gra = [["","",""],["","",""],["","",""]]
-gracz="x"
-a=0
-b=0
-remis=False
-rysuj(gra)
-while winner==False and remis==False:
-  print("wpisz współrzędną")
-  try:   
-    a=wpisz("współrzedne 1- ")
-    b=wpisz("współrzedne 2- ")
-  except:   
-    print("Podano nieprawidłowy znak (dozwolone: 0, 1, 2)")
-  else:
-    if gra[a][b]=="":
-      gra[a][b]=gracz  
-      rysuj(gra)  
-      winner=sprawdz(gra, gracz)
-      if winner==True: 
-        print("wygrał ", gracz)
-      else:
-        gracz=zmien(gracz)
-        remis=czy_remis(gra)
-        if remis==True: 
-          print("remis")
+def draw_check(game):
+    if (game[0] != "_" and game[1] != "_" and game[2] != "_" and game[3] != "_" and game[4] != "_" and game[5] != "_" and game[
+        6] != "_" and game[7] != "_" and game[8] != "_"):
+        return True
     else:
-      print("To pole jest zajęte")
+        return False
+
+def check(game, player):
+    if ((game[0] == player and game[1] == player and game[2] == player)
+            or (game[3] == player and game[4] == player and game[5] == player)
+            or (game[6] == player and game[7] == player and game[8] == player)
+            or (game[0] == player and game[3] == player and game[6] == player)
+            or (game[1] == player and game[4] == player and game[7] == player)
+            or (game[2] == player and game[5] == player and game[8] == player)
+            or (game[0] == player and game[4] == player and game[8] == player)
+            or (game[2] == player and game[4] == player and game[6] == player)):
+        return True
+    else:
+        return False
+
+def enter(symbol):
+    try:
+        z = int(input(f'Where {symbol}'))
+        if z < 1 or z > 9:
+            raise ValueError
+    except ValueError:
+        print("You entered wrong number")
+    return z
+
+def change(player):
+    if (player == "X"):
+        return "O"
+    else:
+        return "X"
+
+
+print("\nHow to play\nYou have to enter a number between 1 and 9 to place a symbol)")
+print("1 2 3 \n"
+      "4 5 6 \n"
+      "7 8 9 \n")
+
+a = 0
+empty = []
+game = ["_", "_", "_", "_", "_", "_", "_", "_", "_"]
+player = "X"
+winner = False
+tie = False
+draw(game)
+
+while winner == False and tie == False:
+    try:
+        a = int(input(f'Where {player}: '))
+        if a < 1 or a > 9:
+            raise ValueError
+    except ValueError:
+        print("You entered wrong number")
+    else:
+        if game[a-1] == "_":
+            game[a-1] = player
+            draw(game) #print table
+            winner = check(game, player)
+            if winner == True:
+                print(f'{player} won the game')
+                break
+            else:
+                tie = draw_check(game)
+                if tie == True:
+                    print("Draw")
+                else:
+                    player = change(player)
+        else:
+            print("This place is not available")
+
