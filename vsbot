@@ -1,0 +1,87 @@
+import random
+
+def czy_remis(gra):
+  if (gra[0]!="_" and gra[1]!="_" and gra[2]!="_" and gra[3]!="_" and gra[4]!="_" and gra[5]!="_" and gra[6]!="_" and gra[7]!="_" and gra[8]!="_"):
+    return True
+  else:
+    return False
+
+def wpisz(f):
+  z=int(input(f))
+  if z < 1 or z > 9:
+    raise ValueError;
+  return z    
+
+def sprawdz(gra,gracz):
+  if ((gra[0]==gracz and gra[1]==gracz and gra[2]==gracz)
+or (gra[3]==gracz and gra[4]==gracz and gra[5]==gracz)
+or (gra[6]==gracz and gra[7]==gracz and gra[8]==gracz)
+or (gra[0]==gracz and gra[3]==gracz and gra[6]==gracz)
+or (gra[1]==gracz and gra[4]==gracz and gra[7]==gracz)
+or (gra[2]==gracz and gra[5]==gracz and gra[8]==gracz)
+or (gra[0]==gracz and gra[4]==gracz and gra[8]==gracz)
+or (gra[2]==gracz and gra[4]==gracz and gra[6]==gracz)):
+    return True
+  else:
+    return False 
+
+def rysuj(tablica):
+  for i in range(3):
+    print(tablica[i*3],tablica[i*3+1],tablica[i*3+2])
+
+def zmien(gracz):
+  if (gracz=="x"):
+    return "o"
+  else:
+    return "x"
+  
+def uzupelnij_puste(gra):
+  puste=[]
+  i=0
+  for p in gra:
+    if p=="_":
+      puste.append(i)
+    i=i+1
+  return puste
+
+def losuj(puste):
+  los = random.randrange(0, len(puste))
+  return puste[los]
+
+print("How to play\nYou have to enter a number between 1 and 9 to place a symbol)")
+print("1 2 3 \n"
+      "4 5 6 \n"
+      "7 8 9 \n")
+
+winner=False
+gra=["_","_","_","_","_","_","_","_","_"]
+puste=[]
+gracz="x"
+a=0
+remis=False
+rysuj(gra)
+while winner==False and remis==False:
+  try:
+    if gracz=="x":
+      a=wpisz("\nWhere X: ")-1
+    else:
+      a=losuj(puste)
+      print("Bot places O")
+  except:   
+    print("You entered wrong number")
+  else:
+    if gra[a]=="_":
+      gra[a]=gracz 
+      rysuj(gra)  
+      winner=sprawdz(gra, gracz)
+      if winner==True: 
+        print(f'{gracz} won the game')
+      else:
+        remis=czy_remis(gra)
+        if remis==True: 
+          print("draw")
+        else:
+          puste=uzupelnij_puste(gra)
+          gracz=zmien(gracz)
+    else:
+      print("This place is not available")
