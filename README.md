@@ -1,2 +1,1 @@
-# Kolko-i-krzyzyk-python
-Zrobione w 2019 roku w liceum
+Kółko i krzyżyk dla 2 graczy albo gracza i bota
